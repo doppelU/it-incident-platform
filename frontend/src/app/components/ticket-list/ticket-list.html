@@ -1,0 +1,52 @@
+<div class="ticket-dashboard">
+  <h1>IT Incident Platform</h1>
+
+  <form (ngSubmit)="createTicket()" class="new-ticket-form">
+    <input
+      [(ngModel)]="newTitle"
+      name="title"
+      placeholder="Título del ticket"
+      required
+    />
+    <input
+      [(ngModel)]="newDescription"
+      name="description"
+      placeholder="Descripción"
+    />
+    <button type="submit">Crear ticket</button>
+  </form>
+
+  <table class="ticket-table">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Título</th>
+        <th>Prioridad</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (ticket of tickets; track ticket.id) {
+        <tr>
+          <td>{{ ticket.id }}</td>
+          <td>{{ ticket.title }}</td>
+          <td>{{ ticket.priority }}</td>
+          <td>{{ ticket.status }}</td>
+          <td>
+            <select
+              [ngModel]="ticket.status"
+              (ngModelChange)="changeStatus(ticket, $event)"
+              [name]="'status-' + ticket.id"
+            >
+              <option value="OPEN">OPEN</option>
+              <option value="IN_PROGRESS">IN_PROGRESS</option>
+              <option value="RESOLVED">RESOLVED</option>
+              <option value="CLOSED">CLOSED</option>
+            </select>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
