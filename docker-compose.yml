@@ -1,0 +1,43 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: incident-db
+    environment:
+      POSTGRES_DB: incidentdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    container_name: incident-backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/incidentdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build: ./frontend
+    container_name: incident-frontend
+    depends_on:
+      - backend
+    environment:
+      NG_ALLOWED_HOSTS: localhost
+    ports:
+      - "4000:4000"
+
+volumes:
+  postgres_data:
