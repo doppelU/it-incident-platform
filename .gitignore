@@ -1,0 +1,23 @@
+﻿# Node
+node_modules/
+.angular/
+dist/
+
+# Maven
+target/
+*.jar
+
+# IDE
+.vscode/
+.idea/
+*.iml
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
